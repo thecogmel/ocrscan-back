@@ -34,20 +34,23 @@ model User {
 model Invoice {
   id           Int       @id @default(autoincrement())
   user_id      Int
-  file_path    String
-  status       String
-  uploaded_at  DateTime  @default(now())
+  upload_id    Int
+  status       Status    @default(PENDING)
   processed_at DateTime?
   user         User      @relation(fields: [user_id], references: [id])
+  upload       Upload    @relation(fields: [upload_id], references: [id])
+
+  @@map("invoices")
 }
 
 model Upload {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   url       String
-  status    Status   @default(PENDING)
+  status    Status    @default(PENDING)
   userId    Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Invoice   Invoice[]
 
   @@map("uploads")
 }

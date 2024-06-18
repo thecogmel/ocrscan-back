@@ -12,3 +12,42 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Status {
+  PENDING
+  COMPLETE
+  CANCELED
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  name      String?
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Invoice   Invoice[]
+
+  @@map("users")
+}
+
+model Invoice {
+  id           Int       @id @default(autoincrement())
+  user_id      Int
+  file_path    String
+  status       String
+  uploaded_at  DateTime  @default(now())
+  processed_at DateTime?
+  user         User      @relation(fields: [user_id], references: [id])
+}
+
+model Upload {
+  id        Int      @id @default(autoincrement())
+  url       String
+  status    Status   @default(PENDING)
+  userId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("uploads")
+}

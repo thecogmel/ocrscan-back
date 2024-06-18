@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@nestjs/common';
 import { createClient } from '@supabase/supabase-js';
+import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
 export class UploadService {
+  constructor(private prisma: PrismaService) {}
+
   async uploadFile(file: Express.Multer.File) {
     const supabaseURL = 'https://nvtvaoijcjxlhzspqwdh.supabase.co';
     const supabaseKey =
@@ -14,8 +17,25 @@ export class UploadService {
       },
     });
 
-    return await supabase.storage
-      .from('ocr')
-      .upload(file.originalname, file.buffer, { upsert: true });
+    try {
+      await supabase.storage
+        .from('ocr')
+        .upload(file.originalname, file.buffer, { upsert: true });
+
+      const publicURL = supabase.storage
+        .from('ocr')
+        .getPublicUrl(file.originalname);
+
+      await this.prisma.upload.create({
+        data: {
+          userId: 1,
+          url: publicURL.data.publicUrl,
+        },
+      });
+
+      return publicURL.data.publicUrl;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 }

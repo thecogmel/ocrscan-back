@@ -18,20 +18,15 @@ export class UploadController {
   @Post('/')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    const parseImage = await this.ocrService.parseImage(file.buffer);
-
-    const regex = /^(.+)\s+([\d]+)\s*(km|quilômetros)$/i;
-
-    const result = parseImage
-      .filter((linha) => regex.test(linha))
-      .map((linha) => {
-        const matches = regex.exec(linha);
-        if (matches) {
-          return { cidade: matches[1], distancia: matches[2] };
-        } else {
-          return null; // or handle the case when matches is null
-        }
-      });
-    return result;
+    try {
+      const upload = await this.uploadService.uploadFile(file);
+      const parseImage = await this.ocrService.parseImage(file.buffer);
+      return {
+        upload,
+        parseImage,
+      };
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 }

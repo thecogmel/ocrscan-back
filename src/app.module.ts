@@ -1,17 +1,18 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UploadModule } from './upload/upload.module';
-import { OcrService } from './ocr/ocr.service';
-import { OcrModule } from './ocr/ocr.module';
 import {
   PrismaModule,
   providePrismaClientExceptionFilter,
 } from 'nestjs-prisma';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
+
+import { UsersModule } from './users/users.module';
+import { InvoicesModule } from './invoices/invoices.module';
 
 @Module({
-  imports: [UploadModule, OcrModule, PrismaModule],
+  imports: [PrismaModule, AuthModule, UsersModule, InvoicesModule],
   controllers: [AppController],
-  providers: [AppService, OcrService, providePrismaClientExceptionFilter()],
+  providers: [AppService, providePrismaClientExceptionFilter()],
 })
 export class AppModule {}

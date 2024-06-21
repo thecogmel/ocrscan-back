@@ -1,73 +1,100 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+![Website Deploy](https://deploy-badge.vercel.app/?url=http://www.nextjs.org/&name=ocrscan)
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# OCR SCAN - Backend
 
-## Installation
+The [ocrscan-back](https://github.com/thecogmel/ocrscan-back) project is a backend service built using the Nest.js framework. It processes data from scanned invoices sent by the front-end application. The repository includes environment setup, API routes, data models, and test configurations. It facilitates the extraction, processing, and storage of invoice data. 
 
-```bash
-$ yarn install
-```
+For more details, visit the [ocrscan-front GitHub repository](https://github.com/thecogmel/ocrscan-front).
 
-## Running the app
 
-```bash
-# development
-$ yarn run start
+## Autor
 
-# watch mode
-$ yarn run start:dev
+- [@thecogmel](https://www.github.com/thecogmel)
 
-# production mode
-$ yarn run start:prod
-```
 
-## Test
+## Features
+
+- **OCR Processing**: Extracts text data from scanned invoices using Optical Character Recognition.
+- **Data Management**: Handles the organization, storage, and retrieval of extracted invoice data.
+- **API Integration**: Provides endpoints for interaction with the front-end application.
+- **Authentication**: Supports user authentication and authorization.
+- **Environment Configuration**: Includes setup instructions for different environments.
+- **Testing**: Contains tests to ensure functionality and reliability of the service.
+
+
+## Stack utilizada
+
+**Front-end:** NextJS, TailwindCSS, ReactQuery
+
+**Back-end:** NestJS, PostgreSQL, Tesseract-ocr
+
+### Running Locally
+
+Clone the project
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+git clone https://github.com/thecogmel/ocrscan-front.git
 ```
 
-## Support
+Navigate to the project directory
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+cd ocrscan-front
+```
 
-## Stay in touch
+Install the dependencies
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+yarn install
+```
 
-## License
+Migrate prisma database. Obs.: You must have empty postgresql db running
 
-Nest is [MIT licensed](LICENSE).
+```bash
+npx prisma db push
+```
+
+Start the server
+
+```bash
+yarn star:dev
+```
+### Environment Variables
+
+To run this project, you will need to add the following environment variables to your `.env` file:
+
+```dotenv
+SUPABASE_API="https://nvtvaoijcjxlhzspqwdh.supabase.co"
+SUPABASE_API_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52dHZhb2lqY2p4bGh6c3Bxd2RoIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcxODY0MzgyNywiZXhwIjoyMDM0MjE5ODI3fQ.bPIJUgf4KUOEVf3_CJ5OX34S0utu8byBM0ExazqP1Jc"
+ORG_SUPABASE="n!mK6rgYWcraMv5"
+
+GITHUB_CLIENT_ID=Ov23liEMF8IFRvl2CvdY
+GITHUB_CLIENT_SECRET=ecaf0e0ba0b9a5aa089f735388f09a3bd7d531e8
+
+JWT_SECRET="n!mK6rgYWcraMv5"
+
+DATABASE_NAME=ocrscan-db
+DATABASE_USER=ocrscan-user
+DATABASE_PASSWORD=password
+DATABASE_HOST=postgres
+DATABASE_PORT=5432
+DATABASE_URL=postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?schema=public
+PORT=2345
+```
+
+
+
+## Improvements
+
+Here are some potential improvements that could be implemented in the ocrscan-front project:
+
+- **Social Login Implementation**: Add social login functionality using GitHub and other authentication gateways to simplify user access.
+- **Testing**: Develop and integrate tests to ensure the reliability and functionality of the application.
+- **Code Refactoring**: Optimize the codebase for better performance and maintainability.
+- **Accessibility Enhancements**: Improve accessibility features to make the application more usable for people with disabilities.
+### Feedback
+
+If you have any feedback, please let us know at erick.medeiros.104@ufrn.edu.br.

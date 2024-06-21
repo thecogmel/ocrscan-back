@@ -3,19 +3,54 @@ import { createClient } from '@supabase/supabase-js';
 import { PrismaService } from 'nestjs-prisma';
 import * as tesseract from 'node-tesseract-ocr';
 import { User } from 'src/users/entities/user.entity';
+import { extractValuesBetween, parseItemString } from 'src/utils/helpers';
 
 @Injectable()
 export class InvoicesService {
   constructor(private prisma: PrismaService) {}
 
-  async parseImage(imageBuffer: Express.Multer.File['buffer']) {
+  async parseImage(
+    imageBuffer: Express.Multer.File['buffer'],
+    invoice_id: string
+  ) {
     try {
       const text = await tesseract.recognize(imageBuffer, {
         oem: 1,
         psm: 4,
         lang: 'eng',
       });
-      return text.split('\n');
+      await this.prisma.invoice.update({
+        where: {
+          id: invoice_id,
+        },
+        data: {
+          processed_at: new Date(),
+        },
+      });
+      const textArray = text.split('\n');
+
+      const productsExtracted = extractValuesBetween(
+        textArray,
+        'UNIDADE',
+        '‘Subtotal 186.00'
+      );
+      const itemsParsed = productsExtracted.map((item) =>
+        parseItemString(item)
+      );
+
+      const totalIndex = textArray.findIndex((line) => line.includes('TOTAL'));
+      let totalValue = 0;
+      if (totalIndex !== -1) {
+        const totalLine = textArray[totalIndex];
+        totalValue = parseFloat(totalLine.split(' ')[1]);
+      } else {
+        console.log('Total não encontrado no array.');
+      }
+
+      return {
+        items: itemsParsed,
+        total: totalValue,
+      };
     } catch (error) {
       throw new Error(error.message);
     }
@@ -40,16 +75,28 @@ export class InvoicesService {
         .from('ocr')
         .getPublicUrl(file.originalname);
 
-      await this.prisma.invoice.create({
+      const invoice = await this.prisma.invoice.create({
         data: {
           user_id: user.id,
           url: publicURL.data.publicUrl,
         },
       });
 
-      return publicURL.data.publicUrl;
+      return {
+        url: publicURL.data.publicUrl,
+        invoice_id: invoice.id,
+      };
     } catch (error) {
       throw new Error(error.message);
     }
+  }
+
+  async findAll(user: User) {
+    const invoices = await this.prisma.invoice.findMany({
+      where: {
+        user_id: user.id,
+      },
+    });
+    return invoices.map((invoice) => invoice);
   }
 }

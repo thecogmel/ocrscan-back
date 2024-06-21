@@ -1,19 +1,23 @@
 import {
   Controller,
+  Get,
   Post,
-  Req,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { InvoicesService } from './invoices.service';
 import { CurrentUser } from 'src/auth/decorator/current-user.decorator';
 import { User } from 'src/users/entities/user.entity';
-import { log } from 'console';
+import { InvoicesService } from './invoices.service';
 
 @Controller('invoices')
 export class InvoicesController {
   constructor(private readonly invoicesService: InvoicesService) {}
+
+  @Get()
+  async findAll(@CurrentUser() user: User) {
+    return this.invoicesService.findAll(user);
+  }
 
   @Post('/ocr')
   @UseInterceptors(FileInterceptor('file'))
@@ -23,9 +27,12 @@ export class InvoicesController {
   ) {
     try {
       const upload = await this.invoicesService.uploadFile(file, user);
-      const parseImage = await this.invoicesService.parseImage(file.buffer);
+      const parseImage = await this.invoicesService.parseImage(
+        file.buffer,
+        upload.invoice_id
+      );
       return {
-        upload,
+        upload: upload.url,
         parseImage,
       };
     } catch (error) {

@@ -10,5 +10,11 @@ services:
       - postgres-data:/var/lib/postgresql/data
     ports:
       - 5432:5432
+  api:
+    build: .
+    ports:
+      - ${PORT}:${PORT}
+    env_file:
+      - .env
 volumes:
   postgres-data:

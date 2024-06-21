@@ -38,6 +38,19 @@ model Invoice {
   status       Status    @default(PENDING)
   processed_at DateTime?
   user         User      @relation(fields: [user_id], references: [id])
+  Item         Item[]
 
   @@map("invoices")
+}
+
+model Item {
+  id          String  @id @default(cuid())
+  quantity    Int
+  name        String
+  unit_price  Float
+  total_value Float
+  invoiceId   String
+  invoice     Invoice @relation(fields: [invoiceId], references: [id])
+
+  @@map("items")
 }

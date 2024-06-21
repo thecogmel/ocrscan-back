@@ -9,9 +9,10 @@ import { AuthModule } from './auth/auth.module';
 
 import { UsersModule } from './users/users.module';
 import { InvoicesModule } from './invoices/invoices.module';
+import { ItemsModule } from './items/items.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, UsersModule, InvoicesModule],
+  imports: [PrismaModule, AuthModule, UsersModule, InvoicesModule, ItemsModule],
   controllers: [AppController],
   providers: [AppService, providePrismaClientExceptionFilter()],
 })

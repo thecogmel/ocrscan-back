@@ -4,7 +4,7 @@ export const extractValuesBetween = (
   endMarker: string
 ) => {
   const startIndex = array.indexOf(startMarker) + 1;
-  const endIndex = array.indexOf(endMarker);
+  const endIndex = array.findIndex((item) => item.includes(endMarker));
   if (startIndex === 0 || endIndex === -1 || startIndex >= endIndex) {
     return [];
   }
@@ -14,9 +14,9 @@ export const extractValuesBetween = (
 export const parseItemString = (item: string) => {
   const parts = item.split(' ');
   return {
-    quantidade: parseInt(parts[0]),
-    nome: parts.slice(1, -2).join(' '),
-    preco_unidade: parseFloat(parts[parts.length - 2]),
-    valor: parseFloat(parts[parts.length - 1]),
+    quantity: parseInt(parts[0]),
+    name: parts.slice(1, -2).join(' '),
+    unit_price: parseFloat(parts[parts.length - 2]),
+    total_value: parseFloat(parts[parts.length - 1]),
   };
 };

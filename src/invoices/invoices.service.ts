@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Status } from '@prisma/client';
 import { createClient } from '@supabase/supabase-js';
 import { PrismaService } from 'nestjs-prisma';
 import * as tesseract from 'node-tesseract-ocr';
@@ -25,6 +26,7 @@ export class InvoicesService {
         },
         data: {
           processed_at: new Date(),
+          status: Status.COMPLETE,
         },
       });
       const textArray = text.split('\n');
@@ -32,7 +34,7 @@ export class InvoicesService {
       const productsExtracted = extractValuesBetween(
         textArray,
         'UNIDADE',
-        '‘Subtotal 186.00'
+        'Subtotal'
       );
       const itemsParsed = productsExtracted.map((item) =>
         parseItemString(item)
@@ -46,6 +48,13 @@ export class InvoicesService {
       } else {
         console.log('Total não encontrado no array.');
       }
+
+      await this.prisma.item.createMany({
+        data: itemsParsed.map((item) => ({
+          ...item,
+          invoiceId: invoice_id,
+        })),
+      });
 
       return {
         items: itemsParsed,
@@ -96,7 +105,20 @@ export class InvoicesService {
       where: {
         user_id: user.id,
       },
+      include: {
+        Item: true,
+      },
     });
-    return invoices.map((invoice) => invoice);
+    return invoices.map((invoice) => {
+      return {
+        ...invoice,
+        Item: undefined,
+        items: invoice.Item.map((item) => {
+          return {
+            ...item,
+          };
+        }),
+      };
+    });
   }
 }

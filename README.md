@@ -60,6 +60,8 @@ yarn star:dev
 ```
 ## Example data
 
+This project is hosted by Vercel in: https://ocrscan-front.vercel.app/
+
 User and password example:
 ```json
 {

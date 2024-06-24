@@ -10,11 +10,6 @@ The [ocrscan-back](https://github.com/thecogmel/ocrscan-back) project is a backe
 For more details, visit the [ocrscan-front GitHub repository](https://github.com/thecogmel/ocrscan-front).
 
 
-## Autor
-
-- [@thecogmel](https://www.github.com/thecogmel)
-
-
 ## Features
 
 - **OCR Processing**: Extracts text data from scanned invoices using Optical Character Recognition.
@@ -25,12 +20,13 @@ For more details, visit the [ocrscan-front GitHub repository](https://github.com
 - **Testing**: Contains tests to ensure functionality and reliability of the service.
 
 
-## Stack utilizada
+## Stacks
 
 **Front-end:** NextJS, TailwindCSS, ReactQuery
 
 **Back-end:** NestJS, PostgreSQL, Tesseract-ocr
 
+**Cloud:** Supabase, Digital Ocean, Vercel
 ### Running Locally
 
 Clone the project
@@ -62,6 +58,17 @@ Start the server
 ```bash
 yarn star:dev
 ```
+## Example data
+
+User and password example:
+```json
+{
+    username: admin@user.com,
+    password: password
+}
+```
+For the invoice models used, the following model was used:
+[Invoice example](https://nvtvaoijcjxlhzspqwdh.supabase.co/storage/v1/object/public/ocr/modelo-invoice.png)
 ### Environment Variables
 
 To run this project, you will need to add the following environment variables to your `.env` file:
@@ -98,3 +105,6 @@ Here are some potential improvements that could be implemented in the ocrscan-fr
 ### Feedback
 
 If you have any feedback, please let us know at erick.medeiros.104@ufrn.edu.br.
+## Autor
+
+- [@thecogmel](https://www.github.com/thecogmel)
